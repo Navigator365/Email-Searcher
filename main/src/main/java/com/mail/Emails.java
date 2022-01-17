@@ -22,8 +22,8 @@ public class Emails {
 
     // Adds service linked with email address
     public void addService(String emailAddress, String service) {
-        ArrayList<String> x = new ArrayList<>();
 
+        ArrayList<String> x = new ArrayList<>();
         x.add(emailAddress);
         x.add(service);
         m_services.add(x);
@@ -45,7 +45,7 @@ public class Emails {
     // Writes all valid data onto a csv file, recording information on every email
     public void writeToCSV(String csvPath) {
         try (PrintWriter writer = new PrintWriter(csvPath)) {
-            
+
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < m_services.size(); i++) {
                 sb.append(m_services.get(i).get(0));

@@ -64,7 +64,7 @@ public class FileAuthenticator {
 
         int violations = 0;
 
-        // Detect and report any violations by comparing services registerd for and
+        // Detect and report any violations by comparing services registered for and
         // services currently emailing a given address
         for (int i = 0; i < sheetSideEmails.size(); i++) {
             ArrayList<String> x = emails.getServices(sheetSideEmails.get(i));
