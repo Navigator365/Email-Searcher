@@ -25,6 +25,7 @@ with IMAPClient(HOST) as client:
     for uid, message_data in client.fetch(messages, "RFC822").items():
         email_message = email.message_from_bytes(message_data[b"RFC822"])
         counter = 0
+        violationCounter = 0
         # Parsing for our email address
         to = email_message.get("To")
         location = to.find('<') + 1
@@ -36,10 +37,10 @@ with IMAPClient(HOST) as client:
         for address in emails:
             if(address is to):
                 if(services[counter] not in email_message.get("From")):
+                    violationCounter += 1
                     print("Violation: " + str(uid) + ",  " + email_message.get("From") + ", " + email_message.get(
                         "Subject") + ", " + email_message.get("To") + " at " + email_message['date'] + ", should be " + services[counter] + " to " + address)
-
             counter += 1
-
+    print(str(violationCounter) + " Violations")
     client.logout()
     b'Logging out'
