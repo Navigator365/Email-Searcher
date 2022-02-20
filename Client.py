@@ -1,6 +1,6 @@
 import email
+import gspread
 from webbrowser import get
-import re
 
 from imapclient import IMAPClient
 
@@ -8,10 +8,16 @@ HOST = "mail.cs-georgetown.net"
 USERNAME = "honeypot"
 PASSWORD = "2nyMugpCadfNpUOo"
 
-emails = ["micah003.1", "micah004.1", "micah005", "micah006", "micah009", "micah007", "micah008", "micah0010", "micah011", "micah012", "micah012", "micah013", "micah014", "micah014-1", "micah015", "micah016", "micah017", "micah017-1", "micah018", "micah019", "micah020", "micah021", "micah022", "micah023", "micah024",
-          "micah025", "micah025-1", "micah026-1", "micah027", "micah028", "micah028-1", "micah029", "micah029", "micah031", "micah032", "micah033", "micah034", "micah035", "micah036", "micah037", "micah038", "micah039", "micah040", "micah041", "micah042", "micah043", "micah0431", "micah0431-1", "micah044", "micah045"]
-services = ["Spotify", "Netflix", "archiveofourown", "Fandom", "Fandom", "IMDb", "IMDb", "Realtor.com", "Zillow", "Redfin", "Redfin", "rightmove", "DocuSign", "DocuSign", "Jehovah's Witnesses", "Jehovah's Witnesses", "findagrave", "findagrave", "Badoo", "Badoo", "BibleGateway", "YouVersion", "YouVersion", "Zoom",
-            "Zoom", "Reddit", "Reddit", "Twitter", "Twitter", "LinkedIn", "LinkedIn", "Microsoft", "Microsoft", "Amazon", "Amazon", "eBay", "Rakuten", "AliExpress", "AliExpress", "Walmart", "CoinMarketCap", "CoinMarketCap", "eToro", "Binance", "Binance", "MarketWatch", "foxbusiness", "foxbusiness", "CoinGecko", "CoinGecko"]
+
+gc = gspread.service_account()
+sh = gc.open("Email Signup Website Sheet")
+
+emails = sh.sheet1.get_values('A2:A51')
+services = sh.sheet1.get_values('G2:G51')
+
+finalSheet = gc.open('Email Violations')
+finalSheet.share('bensdodge255@gmail.com', perm_type='user', role='writer')
+
 
 with IMAPClient(HOST) as client:
     # Initial login and email count
@@ -35,12 +41,15 @@ with IMAPClient(HOST) as client:
             to = to[0:to.find('@')]
         # Sort through to find matching email address, check to make sure service is expected service
         for address in emails:
-            if(address is to):
-                if(services[counter] not in email_message.get("From")):
+            if(address[0] is to):
+                if(services[counter][0] not in email_message.get("From")):
                     violationCounter += 1
+                    finalSheet.sheet1.append_row([uid, email_message.get("From"), email_message.get(
+                        "Subject"), email_message.get("To"), email_message['date']])
                     print("Violation: " + str(uid) + ",  " + email_message.get("From") + ", " + email_message.get(
-                        "Subject") + ", " + email_message.get("To") + " at " + email_message['date'] + ", should be " + services[counter] + " to " + address)
+                        "Subject") + ", " + email_message.get("To") + " at " + email_message['date'] + ", should be " + services[counter][0] + " to " + address[0])
             counter += 1
+
     print(str(violationCounter) + " Violations")
     client.logout()
     b'Logging out'
