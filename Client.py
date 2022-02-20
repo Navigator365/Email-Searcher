@@ -7,13 +7,13 @@ from imapclient import IMAPClient
 HOST = "mail.cs-georgetown.net"
 USERNAME = "honeypot"
 PASSWORD = "2nyMugpCadfNpUOo"
-
+CURRENT_SEARCH = 51
 
 gc = gspread.service_account()
 sh = gc.open("Email Signup Website Sheet")
 
-emails = sh.sheet1.get_values('A2:A51')
-services = sh.sheet1.get_values('G2:G51')
+emails = sh.sheet1.get_values('A2:A' + str(CURRENT_SEARCH))
+services = sh.sheet1.get_values('G2:G' + str(CURRENT_SEARCH))
 
 finalSheet = gc.open('Email Violations')
 finalSheet.share('bensdodge255@gmail.com', perm_type='user', role='writer')
