@@ -8,3 +8,6 @@ sh = gc.open("Email Signup Website Sheet")
 
 print(sh.sheet1.get('A1'))
 
+finalSheet = gc.create('testing')
+finalSheet.share('bensdodge255@gmail.com', perm_type='user', role='writer')
+
