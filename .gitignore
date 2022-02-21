@@ -1,15 +1,2 @@
-# We won't need the csv's
-*.csv
-
-# Same for the txt's
-*.txt
-
-# Same for the pom and target
-pom.xml
-target
-
-# For now, we won't need the test folder
-main/src/test
-
 # .vscode is utterly unncessary
 .vscode
