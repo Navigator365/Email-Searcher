@@ -16,8 +16,6 @@ emails = sh.sheet1.get_values('A2:A' + str(CURRENT_SEARCH))
 services = sh.sheet1.get_values('G2:G' + str(CURRENT_SEARCH))
 
 finalSheet = gc.open('Email Violations')
-finalSheet.share('bensdodge255@gmail.com', perm_type='user', role='writer')
-
 
 with IMAPClient(HOST) as client:
     # Initial login and email count
