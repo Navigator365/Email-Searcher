@@ -4,17 +4,21 @@ from webbrowser import get
 
 from imapclient import IMAPClient
 
+# Define constant vars for accessing email server and table
 HOST = "mail.cs-georgetown.net"
 USERNAME = "honeypot"
 PASSWORD = "2nyMugpCadfNpUOo"
 CURRENT_SEARCH = 51
 
+# Access email spreadsheet
 gc = gspread.service_account()
 sh = gc.open("Email Signup Website Sheet")
 
+# Get appropriate values from spreadsheet
 emails = sh.sheet1.get_values('A2:A' + str(CURRENT_SEARCH))
 services = sh.sheet1.get_values('G2:G' + str(CURRENT_SEARCH))
 
+# Open violations spreadsheet which we will write to
 finalSheet = gc.open('Email Violations')
 
 with IMAPClient(HOST) as client:
@@ -42,12 +46,13 @@ with IMAPClient(HOST) as client:
             if(address[0] is to):
                 if(services[counter][0] not in email_message.get("From")):
                     violationCounter += 1
+                    # Write violation to next row in violations spreadsheet
                     finalSheet.sheet1.append_row([uid, email_message.get("From"), email_message.get(
                         "Subject"), email_message.get("To"), email_message['date']])
                     print("Violation: " + str(uid) + ",  " + email_message.get("From") + ", " + email_message.get(
                         "Subject") + ", " + email_message.get("To") + " at " + email_message['date'] + ", should be " + services[counter][0] + " to " + address[0])
             counter += 1
-
+    # Print total violations to see if we're all clear
     print(str(violationCounter) + " Violations")
     client.logout()
     b'Logging out'
