@@ -29,4 +29,4 @@ def readCsv(file):
             writeSite(row[1])
 
 
-readCsv('sample.csv')
+readCsv('top-1m.csv')
