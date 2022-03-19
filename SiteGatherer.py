@@ -18,7 +18,7 @@ def writeSite(url):
         else:
             sh.sheet1.append_row([url, xml[0][0].attrib.get(
                 'TEXT'), xml[0][3].attrib.get('CODE'), xml[0][3].attrib.get('RANK')])
-    time.sleep(2)
+    time.sleep(4)
 
 
 def readCsv(file):
