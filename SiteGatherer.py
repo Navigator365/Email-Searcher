@@ -37,12 +37,13 @@ def readCsv(file, site):
     with open(file, newline='') as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
-            print(row[1])
+            if(site):
+                print(row[1])
+            else:
+                print(row[0])
             if(site):
                 writeSite(row[1])
             else:
                 writeCategory(row[0])
-
-
 
 readCsv('sitesused.csv', False)
