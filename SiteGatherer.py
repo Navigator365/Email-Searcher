@@ -2,6 +2,7 @@ import csv
 import gspread
 import json
 import time
+import requests
 import urllib.request
 import xml.etree.ElementTree as ET
 
@@ -13,7 +14,7 @@ sh = gc.open(sheet_name)
 
 
 def writeSite(url):
-    site = urllib.request.urlopen("https://data.alexa.com/data?cli=10&url=http://" + url)
+    site = urllib.request.urlopen("https://data.alexa.com/data?cli=10&url=http://" + url).read()
     tree = ET.parse(site)
     xml = tree.getroot()
     if(len(list(xml)) > 0):
@@ -25,7 +26,7 @@ def writeSite(url):
     time.sleep(3)
 
 def writeCategory(url):
-    site = urllib.request.urlopen("https://website-categorization.whoisxmlapi.com/api/v2?apiKey=at_2P50aD7BIrirqswZhTcgUC8CFrXbi&domainName=" + url)
+    site = requests.get("https://website-categorization.whoisxmlapi.com/api/v2?apiKey=at_2P50aD7BIrirqswZhTcgUC8CFrXbi&domainName=" + url).json()
     tree = json.loads(site)
     if(tree["websiteResponded"] == "true"):
         sh.sheet1.append_row(url, tree["categories"][0]["tier1"]["name"])
