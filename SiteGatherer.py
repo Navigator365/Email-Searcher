@@ -45,4 +45,4 @@ def readCsv(file, site):
 
 
 
-readCsv('top-1m.csv')
+readCsv('sitesused.csv', False)
