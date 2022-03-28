@@ -30,6 +30,9 @@ def writeCategory(url):
     response = client.data('whoisxmlapi.com')
     if response.website_responded:
         sh.sheet1.append_row([url, response.categories.tier1.name])
+    else:
+        sh.sheet1.append_row([url, "No Data"])
+
     time.sleep(3)
 
 def readCsv(file, site):
