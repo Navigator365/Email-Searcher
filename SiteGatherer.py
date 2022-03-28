@@ -40,7 +40,7 @@ def writeCategory(url):
         sh.sheet1.append_row([url, name])
     else:
         sh.sheet1.append_row([url, "No Data"])
-    time.sleep(5)
+    time.sleep(3)
 
 def readCsv(file, site):
     with open(file, newline='') as csvfile:
