@@ -1,10 +1,10 @@
 import csv
 import gspread
-import json
 import time
-import requests
 import urllib.request
+from websitecategorization import *
 import xml.etree.ElementTree as ET
+
 
 # For official use, use Full Site Ranking
 sheet_name = "bigtest"
@@ -26,12 +26,10 @@ def writeSite(url):
     time.sleep(3)
 
 def writeCategory(url):
-    site = requests.get("https://website-categorization.whoisxmlapi.com/api/v2?apiKey=at_2P50aD7BIrirqswZhTcgUC8CFrXbi&domainName=" + url).json()
-    tree = json.loads(site)
-    if(tree["websiteResponded"] == "true"):
-        sh.sheet1.append_row(url, tree["categories"][0]["tier1"]["name"])
-    else:
-        sh.sheet1.append_row(url, "false")
+    client = Client('2P50aD7BIrirqswZhTcgUC8CFrXbi')
+    response = client.data('whoisxmlapi.com')
+    if response.website_responded:
+        sh.sheet1.append_row([url, response.categories.tier1.name])
     time.sleep(3)
 
 def readCsv(file, site):
