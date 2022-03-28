@@ -27,19 +27,20 @@ def writeSite(url):
 
 def writeCategory(url):
     client = Client('at_2P50aD7BIrirqswZhTcgUC8CFrXbi')
-    response = client.data('whoisxmlapi.com')
+    response = client.data(url, 0.80)
+    confidence = 0.0
+    name = ''
     print(response)
-    count = 0
     if response.website_responded:
         for cat in response.categories:
             if cat.tier1:
-                if(str(cat.tier1.name) != "Not enough content" and count < 1):
-                    sh.sheet1.append_row([url, str(cat.tier1.name)])
-                    count += 1
+                if cat.tier1.confidence > confidence:                    
+                    name = str(cat.tier1.name)
+                    confidence = float(cat.tier1.confidence)
+        sh.sheet1.append_row([url, name])
     else:
         sh.sheet1.append_row([url, "No Data"])
-
-    time.sleep(3)
+    time.sleep(5)
 
 def readCsv(file, site):
     with open(file, newline='') as csvfile:
