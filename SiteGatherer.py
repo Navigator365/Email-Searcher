@@ -28,10 +28,12 @@ def writeSite(url):
 def writeCategory(url):
     client = Client('at_2P50aD7BIrirqswZhTcgUC8CFrXbi')
     response = client.data('whoisxmlapi.com')
+    counter = 0
     if response.website_responded:
         for cat in response.categories:
-            if cat.tier1:
+            if cat.tier1 and counter < 1:
                 sh.sheet1.append_row([url, cat.tier1.name])
+                counter += 1
     else:
         sh.sheet1.append_row([url, "No Data"])
 
